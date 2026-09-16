@@ -1,8 +1,6 @@
 import SectionReveal from './SectionReveal';
-import { skills } from '../data/skills';
 import { SkillsCloud } from './SkillsCloud';
 const About = () => {
-  const allSkills = skills.flatMap(group => group.items);
   return (
     <section id="about" className="py-24 bg-transparent relative z-10">
       <div className="container mx-auto px-6 max-w-6xl">

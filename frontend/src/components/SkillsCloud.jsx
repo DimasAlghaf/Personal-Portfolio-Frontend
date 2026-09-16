@@ -1,8 +1,7 @@
 import { useAnimationFrame } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Marquee } from "./ui/marquee";
 import { BorderBeam } from "./ui/border-beam";
-import { skills } from "../data/skills";
 
 const BEAM_DURATION = 8;
 const BEAM_SIZE = 100;
@@ -12,8 +11,16 @@ export const SkillsCloud = () => {
   const textRef = useRef(null);
   const waveSpanRef = useRef(null);
   const startTimeRef = useRef(null);
+  const [allSkills, setAllSkills] = useState([]);
 
-  const allSkills = skills.flatMap(group => group.items);
+  useEffect(() => {
+    fetch('http://localhost:3000/api/skills')
+      .then(res => res.json())
+      .then(data => {
+        setAllSkills(data.flatMap(group => group.items));
+      })
+      .catch(err => console.error("Error fetching skills:", err));
+  }, []);
 
   useAnimationFrame((time) => {
     if (!(cardRef.current && textRef.current && waveSpanRef.current)) return;

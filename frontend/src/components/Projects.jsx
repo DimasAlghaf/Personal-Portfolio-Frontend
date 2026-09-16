@@ -1,18 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import SectionReveal from './SectionReveal';
 import { ElasticGallery } from './ui/elastic-gallery';
-import { projects } from '../data/projects';
-import { certificates } from '../data/certificates';
 
 const Projects = () => {
   const [activeTab, setActiveTab] = useState('works'); // 'works' | 'certificates'
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedCert, setSelectedCert] = useState(null);
   const [visibleWorksCount, setVisibleWorksCount] = useState(5);
+  const [projects, setProjects] = useState([]);
+  const [certificates, setCertificates] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/projects')
+      .then(res => res.json())
+      .then(data => setProjects(data))
+      .catch(err => console.error("Error fetching projects:", err));
+      
+    fetch('http://localhost:3000/api/certificates')
+      .then(res => res.json())
+      .then(data => setCertificates(data))
+      .catch(err => console.error("Error fetching certificates:", err));
+  }, []);
 
   // Map our projects data to match ElasticGallery's expected format
-  const galleryItems = projects.map((project) => ({
+  const galleryItems = useMemo(() => projects.map((project) => ({
     id: String(project.id).padStart(2, '0'),
     title: project.title,
     category: project.category,
@@ -20,7 +32,7 @@ const Projects = () => {
     alt: project.description,
     description: project.description,
     technologies: project.technologies,
-  }));
+  })), [projects]);
 
   // Prevent scrolling when any modal is open
   useEffect(() => {

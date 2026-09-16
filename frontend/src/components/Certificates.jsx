@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import SectionReveal from './SectionReveal';
-import { certificates } from '../data/certificates';
 
 const Certificates = () => {
   const [selectedCert, setSelectedCert] = useState(null);
+  const [certificates, setCertificates] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/certificates')
+      .then(res => res.json())
+      .then(data => setCertificates(data))
+      .catch(err => console.error("Error fetching certificates:", err));
+  }, []);
 
   // Prevent scrolling when modal is open
   useEffect(() => {
