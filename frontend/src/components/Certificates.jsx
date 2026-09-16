@@ -7,7 +7,8 @@ const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/certificates')
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    fetch(`${API_URL}/api/certificates`)
       .then(res => res.json())
       .then(data => setCertificates(data))
       .catch(err => console.error("Error fetching certificates:", err));

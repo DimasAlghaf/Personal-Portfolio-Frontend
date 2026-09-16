@@ -14,7 +14,8 @@ export const SkillsCloud = () => {
   const [allSkills, setAllSkills] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/skills')
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    fetch(`${API_URL}/api/skills`)
       .then(res => res.json())
       .then(data => {
         setAllSkills(data.flatMap(group => group.items));
